@@ -7,6 +7,6 @@ export default defineConfig({
     port: 3000,
   },
   build: {
-    outDir: "dist", // ✅ Vercel이 찾을 수 있도록 빌드 출력 경로 명시
+    outDir: "dist", // ✅ 이 줄 반드시 포함!
   },
 });
