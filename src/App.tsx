@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { Input } from "../components/ui/input";
+import { Card, CardContent } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "../components/ui/select";
 import { ShieldCheck, Lock, Unlock } from "lucide-react";
 
 function deriveKeyFromPassword(password: string): number {
