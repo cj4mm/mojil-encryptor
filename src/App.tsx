@@ -1,9 +1,12 @@
-import { useState } from "react";
-import { Input } from "@headlessui/react";  // Input 컴포넌트
-import { Card, CardContent } from "@headlessui/react";  // Card 컴포넌트
-import { Button } from "@headlessui/react";  // Button 컴포넌트
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@headlessui/react";
-import { ShieldCheck, Unlock } from "lucide-react";  // 아이콘들
+import React, { useState } from "react";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import { ShieldCheck, Unlock } from "lucide-react";
 
 function deriveKeyFromPassword(password: string): number {
   let hash = 0;
@@ -31,7 +34,7 @@ export default function AsciiXOREncryptor() {
       try {
         const encoder = new TextEncoder();
         const bytes = encoder.encode(text);
-        const encrypted = bytes.map(b => b ^ key);
+        const encrypted = bytes.map((b) => b ^ key);
         const encryptedStr = String.fromCharCode(...encrypted);
         const base64 = btoa(encryptedStr);
         setResult(base64);
@@ -41,8 +44,8 @@ export default function AsciiXOREncryptor() {
     } else {
       try {
         const binaryStr = atob(text);
-        const encrypted = [...binaryStr].map(c => c.charCodeAt(0));
-        const decryptedBytes = encrypted.map(b => b ^ key);
+        const encrypted = [...binaryStr].map((c) => c.charCodeAt(0));
+        const decryptedBytes = encrypted.map((b) => b ^ key);
         const decoder = new TextDecoder();
         const decryptedText = decoder.decode(new Uint8Array(decryptedBytes));
         setResult(decryptedText);
@@ -54,51 +57,63 @@ export default function AsciiXOREncryptor() {
 
   return (
     <div className="max-w-xl mx-auto p-4 space-y-4">
-      <h1 className="text-2xl font-bold text-center text-indigo-600">🧠 모질띨빡 암호기</h1>
+      <h1 className="text-2xl font-bold text-center text-indigo-600">
+        🧠 모질띨빡 암호기
+      </h1>
 
-      <Card>
-        <CardContent className="space-y-4 pt-4">
-          <Select value={mode} onValueChange={setMode}>
-            <SelectTrigger className="w-full">
+      <div className="border rounded-lg p-4 shadow space-y-4">
+        <Select value={mode} onValueChange={setMode}>
+          <SelectTrigger>
+            <div className="w-full">
               <SelectValue placeholder="모드 선택" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="encrypt">암호화</SelectItem>
-              <SelectItem value="decrypt">복호화</SelectItem>
-            </SelectContent>
-          </Select>
-          <Input
-            placeholder={mode === "encrypt" ? "평문 입력 (예: 안녕하세요)" : "암호문 입력 (Base64)"}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
-          <Input
-            placeholder="비밀번호 기반 키 입력"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button onClick={handleProcess}>
-            {mode === "encrypt" ? "암호화" : "복호화"}
-          </Button>
-        </CardContent>
-      </Card>
+            </div>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="encrypt">암호화</SelectItem>
+            <SelectItem value="decrypt">복호화</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <input
+          placeholder={
+            mode === "encrypt"
+              ? "평문 입력 (예: 안녕하세요)"
+              : "암호문 입력 (Base64)"
+          }
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          className="border p-2 rounded w-full"
+        />
+
+        <input
+          placeholder="비밀번호 기반 키 입력"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="border p-2 rounded w-full"
+        />
+
+        <button
+          onClick={handleProcess}
+          className="bg-indigo-600 text-white px-4 py-2 rounded w-full hover:bg-indigo-700"
+        >
+          {mode === "encrypt" ? "암호화" : "복호화"}
+        </button>
+      </div>
 
       {result && (
-        <Card>
-          <CardContent className="pt-4 space-y-2">
-            {mode === "encrypt" ? (
-              <div className="flex items-center space-x-2">
-                <ShieldCheck className="text-green-500" />
-                <strong>암호문 (Base64):</strong> <span>{result}</span>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-2">
-                <Unlock className="text-yellow-500" />
-                <strong>복호화 결과:</strong> <span>{result}</span>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        <div className="border rounded-lg p-4 shadow space-y-2">
+          {mode === "encrypt" ? (
+            <div className="flex items-center space-x-2">
+              <ShieldCheck className="text-green-500" />
+              <strong>암호문 (Base64):</strong> <span>{result}</span>
+            </div>
+          ) : (
+            <div className="flex items-center space-x-2">
+              <Unlock className="text-yellow-500" />
+              <strong>복호화 결과:</strong> <span>{result}</span>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
